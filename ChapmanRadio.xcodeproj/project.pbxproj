@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					EB6BC21D1CD858F7006B615B = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7BH58J7845;
 					};
 					EB6BC2311CD858F8006B615B = {
 						CreatedOnToolsVersion = 7.2;
@@ -399,10 +400,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ChapmanRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.chapman.ChapmanRadio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -410,10 +414,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ChapmanRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.chapman.ChapmanRadio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -484,6 +491,7 @@
 				EB6BC2481CD858F8006B615B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EB6BC2491CD858F8006B615B /* Build configuration list for PBXNativeTarget "ChapmanRadioTests" */ = {
 			isa = XCConfigurationList;
@@ -492,6 +500,7 @@
 				EB6BC24B1CD858F8006B615B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EB6BC24C1CD858F8006B615B /* Build configuration list for PBXNativeTarget "ChapmanRadioUITests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +509,7 @@
 				EB6BC24E1CD858F8006B615B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
