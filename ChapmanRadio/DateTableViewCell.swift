@@ -33,31 +33,75 @@ class DateTableViewCell: UITableViewCell {
         var formattedDate : String = ""
         var newDate = NSDate()
         
-        switch position {
-        case "6":
+        
+        //missing second position=="6"
+        if position=="6"{
             //today, do not modify
             formattedDate = formatter.stringFromDate(NSDate())
-        case "7":
+        }
+        else if position=="7" || position=="1" { //tomorrow
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 1, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+        else if position=="8" || position=="2" {
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 2, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+        else if position=="9" || position=="3" {
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 3, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+        else if position=="10" || position=="4" {
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 4, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+        else if position=="11" || position=="5" {
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 5, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+        else if position=="12"{
+            newDate = userCalendar.dateByAddingUnit([.Day], value: 6, toDate: NSDate(), options: [])!
+            formattedDate = formatter.stringFromDate(newDate)
+        }
+
+        
+        self.dateLabel.text! = formattedDate
+        self.titleLabel.text! = title
+    }
+    
+    
+    func initWithArray(position: Int, title: String){
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "MM/dd"
+        let userCalendar = NSCalendar.currentCalendar()
+        var formattedDate : String = ""
+        var newDate = NSDate()
+        
+        switch position {
+        case 0:
+            //today, do not modify
+            formattedDate = formatter.stringFromDate(NSDate())
+        case 1:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 1, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
-        case "8":
+        case 2:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 2, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
-        case "9":
+        case 3:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 3, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
-        case "10":
+        case 4:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 4, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
-        case "11":
+        case 5:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 5, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
-        case "12":
+        case 6:
             newDate = userCalendar.dateByAddingUnit([.Day], value: 6, toDate: NSDate(), options: [])!
             formattedDate = formatter.stringFromDate(newDate)
             break
