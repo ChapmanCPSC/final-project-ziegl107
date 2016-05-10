@@ -16,7 +16,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     //all the days in the schedule JSON
     var indeces : [String] = [
-        "6", "7", "8", "9", "10", "11", "12"
+        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
     ]
     
     
@@ -30,7 +30,15 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         self.daysTableView.dataSource = self
         
         //set up for tableview
-        validateDays()
+        
+        //if nil, not a dictionary
+        if let _ = [parsed.allValues] as? NSArray {
+            validateDays()
+        }
+        
+        if let _ = parsed[0] {
+            
+        }
         
         let inset = UIEdgeInsetsMake(10, 0, 0, 0)
         self.daysTableView.contentInset = inset
@@ -45,6 +53,11 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
+    
+    
+    
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
@@ -52,11 +65,19 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let thisIndex = self.indeces[indexPath.row]
         
-        let days = parsed[thisIndex] as! NSDictionary
-        let title = days["title"] as! NSString
-            
-
-        cell.initWithDate(thisIndex, title: title as String)
+        
+        //if schedule uses dictionaries
+        if let days = parsed[thisIndex] as? NSDictionary {
+            let title = days["title"] as! NSString
+            cell.initWithDate(thisIndex, title: title as String)
+        }
+        
+        
+        //schedule uses arrays
+        if let today = parsed[indexPath.row] as? NSDictionary{
+            let title = today["title"] as! NSString
+            cell.initWithArray(indexPath.row, title: title as String)
+        }
         
         return cell
     }
@@ -68,8 +89,12 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let _ = parsed[0] {
+            return parsed.count
+        }
         return indeces.count
     }
+    
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.daysTableView.deselectRowAtIndexPath(indexPath, animated: false)
@@ -83,6 +108,12 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         self.presentViewController(navVC, animated: true, completion: nil)
     }
+    
+    
+    
+    
+    
+    
     
     
     @IBAction func goBack(sender: AnyObject) {
@@ -114,9 +145,9 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func validateDays() -> () {
         
         
-        //will remove "6" from indeces if current schedule JSON doesn't include it
+        //will remove from indeces if current schedule JSON doesn't include it
         for i in 0...parsed.count-1 {
-            if (parsed[indeces[i]] as? NSDictionary) != nil {
+            if (parsed[indeces[i]] as? NSDictionary) != nil { //parsed["6"] for example
                 //leave it
             }
             else {
