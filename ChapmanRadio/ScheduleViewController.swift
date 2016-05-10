@@ -94,7 +94,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         //if schedule uses dictionaries
         if let days = parsed[thisIndex]{
             let title = days["title"] as! NSString
-            cell.initWithDate(thisIndex, title: title as String)
+            cell.initWithDate(indexPath.row, title: title as String, count: indeces.count)
         }
         
         

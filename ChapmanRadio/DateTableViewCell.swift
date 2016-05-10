@@ -16,6 +16,8 @@ class DateTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         // Initialization code
     }
 
@@ -25,7 +27,7 @@ class DateTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func initWithDate(position: String, title: String) {
+    func initWithDate(position: Int, title: String, count: Int) {
         
         let formatter = NSDateFormatter()
         formatter.dateFormat = "MM/dd"
@@ -33,36 +35,64 @@ class DateTableViewCell: UITableViewCell {
         var formattedDate : String = ""
         var newDate = NSDate()
         
+        //no today
+        if count<=6 {
+            if position==0{ //tomorrow
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 1, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==1{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 2, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==2{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 3, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==3 {
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 4, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==4 {
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 5, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==5{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 6, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+        }
+        else{
+            if position==0{
+                //today, do not modify
+                formattedDate = formatter.stringFromDate(NSDate())
+            }
+            else if position==1{ //tomorrow
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 1, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==2{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 2, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==3{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 3, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==4 {
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 4, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==5 {
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 5, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+            else if position==6{
+                newDate = userCalendar.dateByAddingUnit([.Day], value: 6, toDate: NSDate(), options: [])!
+                formattedDate = formatter.stringFromDate(newDate)
+            }
+        }
         
-        //missing second position=="6"
-        if position=="6"{
-            //today, do not modify
-            formattedDate = formatter.stringFromDate(NSDate())
-        }
-        else if position=="7" || position=="1" { //tomorrow
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 1, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
-        else if position=="8" || position=="2" {
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 2, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
-        else if position=="9" || position=="3" {
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 3, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
-        else if position=="10" || position=="4" {
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 4, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
-        else if position=="11" || position=="5" {
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 5, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
-        else if position=="12"{
-            newDate = userCalendar.dateByAddingUnit([.Day], value: 6, toDate: NSDate(), options: [])!
-            formattedDate = formatter.stringFromDate(newDate)
-        }
 
         
         self.dateLabel.text! = formattedDate

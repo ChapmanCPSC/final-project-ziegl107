@@ -36,7 +36,17 @@ class ShowViewController: UIViewController {
         self.nameLabel.text! = name
         self.timeLabel.text! = showInfo[2] as! String
         self.genreLabel.text! = showInfo[3] as! String
-        self.descriptionLabel.text! = showInfo[4] as! String
+        var desc = showInfo[4] as! String
+        
+        
+        if desc.containsString("\\\'") {
+            desc = desc.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
+        }
+        if desc.containsString("\\\"") {
+            desc = desc.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+        }
+        
+        self.descriptionLabel.text! = desc
         
     }
 

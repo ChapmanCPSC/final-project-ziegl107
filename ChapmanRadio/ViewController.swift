@@ -161,15 +161,9 @@ class ViewController: UIViewController {
             }
         }//end of didLoad
         
-        
-        
-        
-
-        
-
-
-        
     }
+    
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
