@@ -91,7 +91,7 @@
 		EB6BC2151CD858F7006B615B = {
 			isa = PBXGroup;
 			children = (
-				EB6BC2201CD858F8006B615B /* ChapmanRadio */,
+				EB6BC2201CD858F8006B615B /* Chap Radio */,
 				EB6BC2351CD858F8006B615B /* ChapmanRadioTests */,
 				EB6BC2401CD858F8006B615B /* ChapmanRadioUITests */,
 				EB6BC21F1CD858F8006B615B /* Products */,
@@ -108,7 +108,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		EB6BC2201CD858F8006B615B /* ChapmanRadio */ = {
+		EB6BC2201CD858F8006B615B /* Chap Radio */ = {
 			isa = PBXGroup;
 			children = (
 				EB6BC2211CD858F8006B615B /* AppDelegate.swift */,
@@ -125,6 +125,7 @@
 				002941351CE0342200F0D9B5 /* ShowTableViewCell.xib */,
 				EB6BC22D1CD858F8006B615B /* Info.plist */,
 			);
+			name = "Chap Radio";
 			path = ChapmanRadio;
 			sourceTree = "<group>";
 		};

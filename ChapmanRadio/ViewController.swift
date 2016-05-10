@@ -196,6 +196,7 @@ class ViewController: UIViewController {
     }
     
     
+    
     func setSongImage(url: String) ->() {
         if let imageURL = NSURL(string: url){
             self.songImageView.contentMode = .ScaleAspectFit
