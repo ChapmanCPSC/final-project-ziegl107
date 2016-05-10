@@ -21,6 +21,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var djsLabel: UILabel!
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var volumeButton: UIButton!
+    @IBOutlet weak var talkShowLabel: UILabel!
+    @IBOutlet weak var talkShowDJsLabel: UILabel!
+    @IBOutlet weak var showNameHide: UILabel!
+    @IBOutlet weak var djsHide: UILabel!
+    @IBOutlet weak var nothingLabel: UILabel!
     var player : AVPlayer!
 
     override func viewDidLoad() {
@@ -30,44 +35,138 @@ class ViewController: UIViewController {
         
         let parsed = parseJSON(getJSON("http://api.chapmanradio.com/legacy/livestreams.json"))
         
-        //parsed= show {}, nowplaying {}
+        //parsed= show {}, nowplaying {} if not a talk show
         
-        let show = parsed["show"] as! NSDictionary
+        let id = parsed["showid"]
+        let stringID = String(id!)
         
         
-        if let genre = show["genre"]{
-            if genre as! String == "Talk" {
+        if let intID = Int(stringID){
+            
+            let numID = NSNumber(integer: intID)
+            
+            //id = 0 if no show is on
+            if numID != 0{
+                
+                let show = parsed["show"] as! NSDictionary
+                
+                if let genre = show["genre"]{
+                    self.nothingLabel.hidden = true
+                    
+                    if genre as! String == "Talk" {
+                        //put in song spot
+                        self.talkShowLabel.text! = "TALK SHOW NAME"
+                        self.talkShowDJsLabel.text! = "DJS"
+                        self.djsHide.hidden = true
+                        self.showNameHide.hidden = true
+                        self.showLabel.hidden = true
+                        self.djsLabel.hidden = true
+                        
+                        if let showName = show["showname"]{
+                            self.songLabel.text! = showName as! String
+                        }
+                        
+                        if let djs = show["djs"] {
+                            self.artistLabel.text! = djs as! String
+                        }
+                        
+                        
+                        var url = show["pic"] as! String
+                        url = "http://" + formatURL(url)
+                        //because in the place of song not show
+                        setSongImage(url)
+                    }
+                        
+                    else {
+                        
+                        
+                        if let nowplaying = parsed["nowplaying"] as? NSDictionary{
+                            self.talkShowLabel.text! = "SONG NAME"
+                            self.talkShowDJsLabel.text! = "ARTIST"
+                            self.djsHide.hidden = false
+                            self.showNameHide.hidden = false
+                            self.showLabel.hidden = false
+                            self.djsLabel.hidden = false
+                            
+                            if let songName = nowplaying["track"]{
+                                self.songLabel.text! = songName as! String
+                            }
+                            
+                            let songURL = nowplaying["img100"] as! String
+                            setSongImage(songURL)
+                            
+                            
+                            if let artist = nowplaying["artist"] {
+                                self.artistLabel.text! = artist as! String
+                            }
+                            
+                            
+                            if let showName = show["showname"]{
+                                self.showLabel.text! = showName as! String
+                            }
+                            
+                            if let djs = show["djs"] {
+                                self.djsLabel.text! = djs as! String
+                            }
+                            
+                            var url = show["pic"] as! String
+                            url = formatURL(url)
+                            setShowImage(url)
+
+                        }
+                        else { //not talk show but not currently playing song
+                            //put in song spot
+                            self.talkShowLabel.text! = "SHOW NAME"
+                            self.talkShowDJsLabel.text! = "DJS"
+                            self.djsHide.hidden = true
+                            self.showNameHide.hidden = true
+                            self.showLabel.hidden = true
+                            self.djsLabel.hidden = true
+                            
+                            if let showName = show["showname"]{
+                                self.songLabel.text! = showName as! String
+                            }
+                            
+                            if let djs = show["djs"] {
+                                self.artistLabel.text! = djs as! String
+                            }
+                            
+                            
+                            var url = show["pic"] as! String
+                            url = "http://" + formatURL(url)
+                            //because in the place of song not show
+                            setSongImage(url)
+                        }
+                    }
+                }
+
+            }
+            
+            // id == 0, no show is on
+            else{
+                self.nothingLabel.hidden = false
+                
+                self.djsHide.hidden = true
+                self.showNameHide.hidden = true
+                self.showLabel.hidden = true
+                self.djsLabel.hidden = true
+                self.showImageView.hidden = true
+                self.songImageView.hidden = true
+                self.songLabel.hidden = true
+                self.artistLabel.hidden = true
+                self.talkShowDJsLabel.hidden = true
+                self.talkShowLabel.hidden = true
+                
                 
             }
-            else {
-                let nowplaying = parsed["nowplaying"] as! NSDictionary
-                if let songName = nowplaying["track"]{
-                    self.songLabel.text! = songName as! String
-                }
-                
-                let songURL = nowplaying["img100"] as! String
-                setSongImage(songURL)
-                
-                
-                if let artist = nowplaying["artist"] {
-                    self.artistLabel.text! = artist as! String
-                }
-            }
-        }
+        }//end of didLoad
         
         
-        if let showName = show["showname"]{
-            self.showLabel.text! = showName as! String
-        }
         
         
-        if let djs = show["djs"] {
-            self.djsLabel.text! = djs as! String
-        }
+
         
-        var url = show["pic"] as! String
-        url = formatURL(url)
-        setShowImage(url)
+
 
         
     }
@@ -147,5 +246,11 @@ class ViewController: UIViewController {
         player.muted = false
     }
 
+    
+    @IBAction func goSchedule(sender: AnyObject) {
+        let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("schedule_view") as! UINavigationController
+        
+        self.presentViewController(navVC, animated: true, completion: nil)
+    }
 }
 

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:ChapmanRadio.xcodeproj">
+      location = "self:/Users/kaylaziegler/Downloads/ChapmanRadio/ChapRadio.xcodeproj">
    </FileRef>
 </Workspace>
