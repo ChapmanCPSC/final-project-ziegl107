@@ -58,6 +58,11 @@ class DayViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.init(red: 1, green: 51, blue: 85, alpha: 0)
+    }
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let info = self.data[indexPath.row] as! NSArray
         

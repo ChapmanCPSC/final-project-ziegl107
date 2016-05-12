@@ -216,6 +216,11 @@
 					EB6BC21D1CD858F7006B615B = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 7BH58J7845;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					EB6BC2311CD858F8006B615B = {
 						CreatedOnToolsVersion = 7.2;

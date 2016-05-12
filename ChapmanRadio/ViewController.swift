@@ -9,8 +9,9 @@
 import UIKit
 import AVKit
 import AVFoundation
+import MessageUI
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     
     @IBOutlet weak var showLabel: UILabel!
@@ -34,9 +35,13 @@ class ViewController: UIViewController {
     var genre : String = ""
     var time : String = ""
     var sendURL : String = ""
+    var showN : String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+
+        
         
         configureView()
         
@@ -60,6 +65,7 @@ class ViewController: UIViewController {
                 if let genre = show["genre"]{
                     self.nothingLabel.hidden = true
                     
+                    //talk show
                     if genre as! String == "Talk" {
                         //put in song spot
                         self.talkShowLabel.text! = "TALK SHOW NAME"
@@ -71,6 +77,7 @@ class ViewController: UIViewController {
                         
                         if let showName = show["showname"]{
                             self.songLabel.text! = showName as! String
+                            self.showN = showName as! String
                         }
                         
                         if let djs = show["djs"] {
@@ -91,64 +98,73 @@ class ViewController: UIViewController {
                         
                         
                         var url = show["pic"] as! String
+                        //send url without http://
+                        self.sendURL = formatURL(url)
                         url = "http://" + formatURL(url)
-                        self.sendURL = url
                         //because in the place of song not show
                         setSongImage(url)
                         
                         
                         
                         
-                        
+                        //happens to be playing a song, genre = talk
                         if let nowplaying = parsed["nowplaying"] as? NSDictionary{
-                            self.talkShowLabel.text! = "SONG NAME"
-                            self.talkShowDJsLabel.text! = "ARTIST"
-                            self.djsHide.hidden = false
-                            self.showNameHide.hidden = false
-                            self.showLabel.hidden = false
-                            self.djsLabel.hidden = false
                             
-                            if let songName = nowplaying["track"]{
-                                self.songLabel.text! = songName as! String
+                            //because sometimes talk shows add talk topics under nowplaying
+                            //even though they aren't playing a song
+                            if nowplaying["trackid"] as! String != "" {
+                                self.talkShowLabel.text! = "SONG NAME"
+                                self.talkShowDJsLabel.text! = "ARTIST"
+                                self.djsHide.hidden = false
+                                self.showNameHide.hidden = false
+                                self.showLabel.hidden = false
+                                self.djsLabel.hidden = false
+                                
+                                if let songName = nowplaying["track"]{
+                                    self.songLabel.text! = songName as! String
+                                }
+                                
+                                let songURL = nowplaying["img100"] as! String
+                                setSongImage(songURL)
+                                
+                                
+                                if let artist = nowplaying["artist"] {
+                                    self.artistLabel.text! = artist as! String
+                                }
+                                
+                                
+                                if let showName = show["showname"]{
+                                    self.showLabel.text! = showName as! String
+                                    self.showN = showName as! String
+                                }
+                                
+                                if let djs = show["djs"] {
+                                    self.djsLabel.text! = djs as! String
+                                }
+                                
+                                if let t = show["showtime"] {
+                                    self.time = t as! String
+                                }
+                                
+                                if let _ = show["genre"] {
+                                    self.genre = show["genre"] as! String
+                                }
+                                
+                                var url = show["pic"] as! String
+                                url = formatURL(url)
+                                self.sendURL = url
+                                setShowImage(url)
                             }
                             
-                            let songURL = nowplaying["img100"] as! String
-                            setSongImage(songURL)
-                            
-                            
-                            if let artist = nowplaying["artist"] {
-                                self.artistLabel.text! = artist as! String
-                            }
-                            
-                            
-                            if let showName = show["showname"]{
-                                self.showLabel.text! = showName as! String
-                            }
-                            
-                            if let djs = show["djs"] {
-                                self.djsLabel.text! = djs as! String
-                            }
-                            
-                            if let t = show["showtime"] {
-                                self.time = t as! String
-                            }
-                            
-                            if let _ = show["genre"] {
-                                self.genre = show["genre"] as! String
-                            }
-                            
-                            var url = show["pic"] as! String
-                            self.sendURL = url
-                            url = formatURL(url)
-                            setShowImage(url)
                             
                         }
 
                     }
-                        
+                      
+                    //not a talk show
                     else {
                         
-                        
+                        //playing a song
                         if let nowplaying = parsed["nowplaying"] as? NSDictionary{
                             self.talkShowLabel.text! = "SONG NAME"
                             self.talkShowDJsLabel.text! = "ARTIST"
@@ -172,6 +188,7 @@ class ViewController: UIViewController {
                             
                             if let showName = show["showname"]{
                                 self.showLabel.text! = showName as! String
+                                self.showN = showName as! String
                             }
                             
                             if let djs = show["djs"] {
@@ -196,7 +213,9 @@ class ViewController: UIViewController {
                             setShowImage(url)
 
                         }
-                        else { //not talk show but not currently playing song
+                        
+                        //not currently playing song
+                        else {
                             //put in song spot
                             self.talkShowLabel.text! = "SHOW NAME"
                             self.talkShowDJsLabel.text! = "DJS"
@@ -211,6 +230,7 @@ class ViewController: UIViewController {
                             
                             if let showName = show["showname"]{
                                 self.songLabel.text! = showName as! String
+                                self.showN = showName as! String
                             }
                             
                             if let djs = show["djs"] {
@@ -223,8 +243,8 @@ class ViewController: UIViewController {
                             
                             
                             var url = show["pic"] as! String
+                            self.sendURL = formatURL(url)
                             url = "http://" + formatURL(url)
-                            self.sendURL = url
                             //because in the place of song not show
                             setSongImage(url)
                         }
@@ -339,7 +359,7 @@ class ViewController: UIViewController {
         let showVC = navVC.viewControllers[0] as! ShowViewController
         showVC.descFromMain = self.showDescrip
         showVC.genre = self.genre
-        showVC.nameMain = self.showLabel.text!
+        showVC.nameMain = self.showN
         showVC.time = self.time
         showVC.urlMain = self.sendURL
         
@@ -352,5 +372,29 @@ class ViewController: UIViewController {
         
         self.presentViewController(navVC, animated: true, completion: nil)
     }
+    
+    
+    @IBAction func sendEmail(sender: AnyObject) {
+        
+        var message = "<p><b>Show: </b>"+showLabel.text! + "</p><p><b> DJs: </b>"+djsLabel.text!
+        message += "</p><p><b>Song: </b>"+songLabel.text! + "</p><p><b>Artist: </b>"+artistLabel.text!+"</p>"
+        message += "<p><a href=\"http://www.chapmanradio.com/home\">Visit Chapman Radio</a>"
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setSubject("Check out what's playing on Chapman Radio")
+            mail.setMessageBody(message, isHTML: true)
+            
+            presentViewController(mail, animated: true, completion: nil)
+        }
+        
+        
+    }
+    
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
 }
 
