@@ -26,7 +26,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var showNameHide: UILabel!
     @IBOutlet weak var djsHide: UILabel!
     @IBOutlet weak var nothingLabel: UILabel!
+    @IBOutlet weak var detailButton: UIButton!
+    
+    
     var player : AVPlayer!
+    var showDescrip : String = ""
+    var genre : String = ""
+    var time : String = ""
+    var sendURL : String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,11 +77,73 @@ class ViewController: UIViewController {
                             self.artistLabel.text! = djs as! String
                         }
                         
+                        if let _ = show["description"] {
+                            self.showDescrip = show["description"] as! String
+                        }
+                        
+                        if let t = show["showtime"] {
+                            self.time = t as! String
+                        }
+                        
+                        if let _ = show["genre"] {
+                            self.genre = show["genre"] as! String
+                        }
+                        
                         
                         var url = show["pic"] as! String
                         url = "http://" + formatURL(url)
+                        self.sendURL = url
                         //because in the place of song not show
                         setSongImage(url)
+                        
+                        
+                        
+                        
+                        
+                        if let nowplaying = parsed["nowplaying"] as? NSDictionary{
+                            self.talkShowLabel.text! = "SONG NAME"
+                            self.talkShowDJsLabel.text! = "ARTIST"
+                            self.djsHide.hidden = false
+                            self.showNameHide.hidden = false
+                            self.showLabel.hidden = false
+                            self.djsLabel.hidden = false
+                            
+                            if let songName = nowplaying["track"]{
+                                self.songLabel.text! = songName as! String
+                            }
+                            
+                            let songURL = nowplaying["img100"] as! String
+                            setSongImage(songURL)
+                            
+                            
+                            if let artist = nowplaying["artist"] {
+                                self.artistLabel.text! = artist as! String
+                            }
+                            
+                            
+                            if let showName = show["showname"]{
+                                self.showLabel.text! = showName as! String
+                            }
+                            
+                            if let djs = show["djs"] {
+                                self.djsLabel.text! = djs as! String
+                            }
+                            
+                            if let t = show["showtime"] {
+                                self.time = t as! String
+                            }
+                            
+                            if let _ = show["genre"] {
+                                self.genre = show["genre"] as! String
+                            }
+                            
+                            var url = show["pic"] as! String
+                            self.sendURL = url
+                            url = formatURL(url)
+                            setShowImage(url)
+                            
+                        }
+
                     }
                         
                     else {
@@ -109,8 +178,21 @@ class ViewController: UIViewController {
                                 self.djsLabel.text! = djs as! String
                             }
                             
+                            if let _ = show["description"] {
+                                self.showDescrip = show["description"] as! String
+                            }
+                            
+                            if let t = show["showtime"] {
+                                self.time = t as! String
+                            }
+                            
+                            if let _ = show["genre"] {
+                                self.genre = show["genre"] as! String
+                            }
+                            
                             var url = show["pic"] as! String
                             url = formatURL(url)
+                            self.sendURL = url
                             setShowImage(url)
 
                         }
@@ -123,6 +205,10 @@ class ViewController: UIViewController {
                             self.showLabel.hidden = true
                             self.djsLabel.hidden = true
                             
+                            if let _ = show["genre"] {
+                                self.genre = show["genre"] as! String
+                            }
+                            
                             if let showName = show["showname"]{
                                 self.songLabel.text! = showName as! String
                             }
@@ -131,9 +217,14 @@ class ViewController: UIViewController {
                                 self.artistLabel.text! = djs as! String
                             }
                             
+                            if let t = show["showtime"] {
+                                self.time = t as! String
+                            }
+                            
                             
                             var url = show["pic"] as! String
                             url = "http://" + formatURL(url)
+                            self.sendURL = url
                             //because in the place of song not show
                             setSongImage(url)
                         }
@@ -146,6 +237,7 @@ class ViewController: UIViewController {
             else{
                 self.nothingLabel.hidden = false
                 
+                self.detailButton.hidden = true
                 self.djsHide.hidden = true
                 self.showNameHide.hidden = true
                 self.showLabel.hidden = true
@@ -241,6 +333,19 @@ class ViewController: UIViewController {
         player.muted = false
     }
 
+    @IBAction func goShow(sender: AnyObject) {
+        let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("show_view") as! UINavigationController
+        
+        let showVC = navVC.viewControllers[0] as! ShowViewController
+        showVC.descFromMain = self.showDescrip
+        showVC.genre = self.genre
+        showVC.nameMain = self.showLabel.text!
+        showVC.time = self.time
+        showVC.urlMain = self.sendURL
+        
+        self.presentViewController(navVC, animated: true, completion: nil)
+        
+    }
     
     @IBAction func goSchedule(sender: AnyObject) {
         let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("schedule_view") as! UINavigationController

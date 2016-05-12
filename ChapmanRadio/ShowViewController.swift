@@ -16,37 +16,91 @@ class ShowViewController: UIViewController {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var genreLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    var descFromMain : String!
+    var genre : String!
+    var time : String!
+    var nameMain : String!
+    var urlMain : String!
     var showInfo : NSArray!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let imgURL = formatURL(showInfo[6] as! String)
-        if let url = NSURL(string: "http://"+imgURL){
-            self.showImageView.contentMode = .ScaleAspectFit
-            if let data = NSData(contentsOfURL: url){
-                self.showImageView.image = UIImage(data: data)
+        
+        if showInfo != nil {
+            let imgURL = formatURL(showInfo[6] as! String)
+            if let url = NSURL(string: "http://"+imgURL){
+                self.showImageView.contentMode = .ScaleAspectFit
+                if let data = NSData(contentsOfURL: url){
+                    self.showImageView.image = UIImage(data: data)
+                }
+            }
+            
+            if var name = showInfo[1] as? String{
+                if name.containsString("&amp;"){
+                    name = name.stringByReplacingOccurrencesOfString("&amp;", withString: "&")
+                }
+                
+                self.title = name
+                self.nameLabel.text! = name
+                self.timeLabel.text! = showInfo[2] as! String
+                self.genreLabel.text! = showInfo[3] as! String
+                var desc = showInfo[4] as! String
+                
+                
+                if desc.containsString("\\\'") {
+                    desc = desc.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
+                }
+                if desc.containsString("\\\"") {
+                    desc = desc.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+                }
+                
+                self.descriptionLabel.text! = desc
             }
         }
         
-        var name = showInfo[1] as! String
-        if name.containsString("&amp;"){
-            name = name.stringByReplacingOccurrencesOfString("&amp;", withString: "&")
-        }
-        self.nameLabel.text! = name
-        self.timeLabel.text! = showInfo[2] as! String
-        self.genreLabel.text! = showInfo[3] as! String
-        var desc = showInfo[4] as! String
         
         
-        if desc.containsString("\\\'") {
-            desc = desc.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
-        }
-        if desc.containsString("\\\"") {
-            desc = desc.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+        
+        
+        
+        
+        
+        
+        
+        if descFromMain != nil {
+            
+            
+            //let imgURL = formatURL(self.urlMain)
+            if let url = NSURL(string: "http://"+self.urlMain){
+                self.showImageView.contentMode = .ScaleAspectFit
+                if let data = NSData(contentsOfURL: url){
+                    self.showImageView.image = UIImage(data: data)
+                }
+            }
+            
+            self.timeLabel.text! = self.time
+            
+            if nameMain.containsString("&amp;"){
+                nameMain = nameMain.stringByReplacingOccurrencesOfString("&amp;", withString: "&")
+            }
+            self.nameLabel.text! = self.nameMain
+            self.title = self.nameMain
+            self.genreLabel.text! = self.genre
+            
+            if descFromMain.containsString("\\\'") {
+                descFromMain = descFromMain.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
+            }
+            if descFromMain.containsString("\\\"") {
+                descFromMain = descFromMain.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
+            }
+            
+            self.descriptionLabel.text! = descFromMain
         }
         
-        self.descriptionLabel.text! = desc
+        
+        self.descriptionLabel.adjustsFontSizeToFitWidth = true
+        self.timeLabel.adjustsFontSizeToFitWidth = true
         
     }
 

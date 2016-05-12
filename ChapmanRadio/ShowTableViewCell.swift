@@ -18,7 +18,6 @@ class ShowTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         self.selectionStyle = UITableViewCellSelectionStyle.None
-        // Initialization code
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
