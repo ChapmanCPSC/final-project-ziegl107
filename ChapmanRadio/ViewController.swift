@@ -22,12 +22,13 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var djsLabel: UILabel!
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var volumeButton: UIButton!
-    @IBOutlet weak var talkShowLabel: UILabel!
-    @IBOutlet weak var talkShowDJsLabel: UILabel!
+    @IBOutlet weak var talkShowLabel: UILabel! // default says "SONG"
+    @IBOutlet weak var talkShowDJsLabel: UILabel! // default says "ARTIST"
     @IBOutlet weak var showNameHide: UILabel!
     @IBOutlet weak var djsHide: UILabel!
     @IBOutlet weak var nothingLabel: UILabel!
     @IBOutlet weak var detailButton: UIButton!
+    @IBOutlet weak var sendButton: UIButton!
     
     
     var player : AVPlayer!
@@ -107,12 +108,12 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                         
                         
                         
-                        //happens to be playing a song, genre = talk
+                        //is a talk show but nowplaying is not empty
+                        //either a song or talk topic
                         if let nowplaying = parsed["nowplaying"] as? NSDictionary{
                             
-                            //because sometimes talk shows add talk topics under nowplaying
-                            //even though they aren't playing a song
-                            if nowplaying["trackid"] as! String != "" {
+                            //nowplaying is a song
+                            if nowplaying["text"] as! String == "" {
                                 self.talkShowLabel.text! = "SONG NAME"
                                 self.talkShowDJsLabel.text! = "ARTIST"
                                 self.djsHide.hidden = false
@@ -156,6 +157,44 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                                 setShowImage(url)
                             }
                             
+                            //nowplaying is a talk topic
+                            else {
+                                self.talkShowLabel.text! = "TOPIC"
+                                self.talkShowDJsLabel.hidden = true //talk topic doesn't have artist
+                                self.djsHide.hidden = false
+                                self.showNameHide.hidden = false
+                                self.showLabel.hidden = false
+                                self.djsLabel.hidden = true
+                                
+                                
+                                if let topic = nowplaying["text"] {
+                                    self.songLabel.text! = topic as! String
+                                }
+                                
+                                if let showName = show["showname"]{
+                                    self.showLabel.text! = showName as! String
+                                    self.showN = showName as! String
+                                }
+                                
+                                if let djs = show["djs"] {
+                                    self.djsLabel.text! = djs as! String
+                                }
+                                
+                                if let t = show["showtime"] {
+                                    self.time = t as! String
+                                }
+                                
+                                if let _ = show["genre"] {
+                                    self.genre = show["genre"] as! String
+                                }
+                                
+                                var url = show["pic"] as! String
+                                url = formatURL(url)
+                                self.sendURL = url
+                                setShowImage(url)
+                                
+                            }
+                            
                             
                         }
 
@@ -166,51 +205,94 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                         
                         //playing a song
                         if let nowplaying = parsed["nowplaying"] as? NSDictionary{
-                            self.talkShowLabel.text! = "SONG NAME"
-                            self.talkShowDJsLabel.text! = "ARTIST"
-                            self.djsHide.hidden = false
-                            self.showNameHide.hidden = false
-                            self.showLabel.hidden = false
-                            self.djsLabel.hidden = false
                             
-                            if let songName = nowplaying["track"]{
-                                self.songLabel.text! = songName as! String
+                            
+                            //nowplaying is a song
+                            if nowplaying["trackid"] as! String != "" {
+                                self.talkShowLabel.text! = "SONG NAME"
+                                self.talkShowDJsLabel.text! = "ARTIST"
+                                self.djsHide.hidden = false
+                                self.showNameHide.hidden = false
+                                self.showLabel.hidden = false
+                                self.djsLabel.hidden = false
+                                
+                                if let songName = nowplaying["track"]{
+                                    self.songLabel.text! = songName as! String
+                                }
+                                
+                                let songURL = nowplaying["img100"] as! String
+                                setSongImage(songURL)
+                                
+                                
+                                if let artist = nowplaying["artist"] {
+                                    self.artistLabel.text! = artist as! String
+                                }
+                                
+                                
+                                if let showName = show["showname"]{
+                                    self.showLabel.text! = showName as! String
+                                    self.showN = showName as! String
+                                }
+                                
+                                if let djs = show["djs"] {
+                                    self.djsLabel.text! = djs as! String
+                                }
+                                
+                                if let _ = show["description"] {
+                                    self.showDescrip = show["description"] as! String
+                                }
+                                
+                                if let t = show["showtime"] {
+                                    self.time = t as! String
+                                }
+                                
+                                if let _ = show["genre"] {
+                                    self.genre = show["genre"] as! String
+                                }
+                                
+                                var url = show["pic"] as! String
+                                url = formatURL(url)
+                                self.sendURL = url
+                                setShowImage(url)
                             }
                             
-                            let songURL = nowplaying["img100"] as! String
-                            setSongImage(songURL)
-                            
-                            
-                            if let artist = nowplaying["artist"] {
-                                self.artistLabel.text! = artist as! String
+                            //nowplaying is a talk topic
+                            else{
+                                self.talkShowLabel.text! = "TOPIC"
+                                self.talkShowDJsLabel.hidden = true //talk topic doesn't have artist
+                                self.djsHide.hidden = false
+                                self.showNameHide.hidden = false
+                                self.showLabel.hidden = false
+                                self.djsLabel.hidden = true
+                                
+                                
+                                if let topic = nowplaying["text"] {
+                                    self.songLabel.text! = topic as! String
+                                }
+                                
+                                if let showName = show["showname"]{
+                                    self.showLabel.text! = showName as! String
+                                    self.showN = showName as! String
+                                }
+                                
+                                if let djs = show["djs"] {
+                                    self.djsLabel.text! = djs as! String
+                                }
+                                
+                                if let t = show["showtime"] {
+                                    self.time = t as! String
+                                }
+                                
+                                if let _ = show["genre"] {
+                                    self.genre = show["genre"] as! String
+                                }
+                                
+                                var url = show["pic"] as! String
+                                url = formatURL(url)
+                                self.sendURL = url
+                                setShowImage(url)
                             }
                             
-                            
-                            if let showName = show["showname"]{
-                                self.showLabel.text! = showName as! String
-                                self.showN = showName as! String
-                            }
-                            
-                            if let djs = show["djs"] {
-                                self.djsLabel.text! = djs as! String
-                            }
-                            
-                            if let _ = show["description"] {
-                                self.showDescrip = show["description"] as! String
-                            }
-                            
-                            if let t = show["showtime"] {
-                                self.time = t as! String
-                            }
-                            
-                            if let _ = show["genre"] {
-                                self.genre = show["genre"] as! String
-                            }
-                            
-                            var url = show["pic"] as! String
-                            url = formatURL(url)
-                            self.sendURL = url
-                            setShowImage(url)
 
                         }
                         
@@ -257,6 +339,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
             else{
                 self.nothingLabel.hidden = false
                 
+                self.sendButton.hidden = true
                 self.detailButton.hidden = true
                 self.djsHide.hidden = true
                 self.showNameHide.hidden = true

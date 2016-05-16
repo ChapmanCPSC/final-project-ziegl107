@@ -45,7 +45,7 @@
                                     <constraint firstAttribute="height" constant="114" id="tQw-6E-cz2"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tz0-wu-lEf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song Name" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tz0-wu-lEf">
                                 <rect key="frame" x="154" y="187" width="406" height="22"/>
                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="19"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -244,6 +244,7 @@
                         <outlet property="djsLabel" destination="zTH-wD-62f" id="MRr-kf-xsm"/>
                         <outlet property="muteButton" destination="arJ-HC-Hwf" id="s79-OT-p5D"/>
                         <outlet property="nothingLabel" destination="Zop-fA-mHx" id="1UN-Dc-7QE"/>
+                        <outlet property="sendButton" destination="wno-Wo-9Y3" id="XqV-ea-oAS"/>
                         <outlet property="showImageView" destination="Fif-8u-CbD" id="KLe-da-b5M"/>
                         <outlet property="showLabel" destination="atr-Er-yXT" id="RyD-vG-dJ0"/>
                         <outlet property="showNameHide" destination="ngB-up-k6e" id="J7D-7f-ami"/>
