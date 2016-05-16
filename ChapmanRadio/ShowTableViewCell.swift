@@ -18,6 +18,8 @@ class ShowTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         self.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        self.textLabel?.textColor = UIColor.whiteColor()
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

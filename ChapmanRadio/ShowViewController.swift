@@ -26,7 +26,8 @@ class ShowViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        //coming from DayViewController tableview cells
+        //gets set in didSelectRowAtIndexPath
         if showInfo != nil {
             let imgURL = formatURL(showInfo[6] as! String)
             if let url = NSURL(string: "http://"+imgURL){
@@ -37,16 +38,14 @@ class ShowViewController: UIViewController {
             }
             
             if var name = showInfo[1] as? String{
+                
+                var desc = showInfo[4] as! String
+                
+                
+                //remove escape characters from name and description
                 if name.containsString("&amp;"){
                     name = name.stringByReplacingOccurrencesOfString("&amp;", withString: "&")
                 }
-                
-                self.title = name
-                self.nameLabel.text! = name
-                self.timeLabel.text! = showInfo[2] as! String
-                self.genreLabel.text! = showInfo[3] as! String
-                var desc = showInfo[4] as! String
-                
                 
                 if desc.containsString("\\\'") {
                     desc = desc.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
@@ -55,6 +54,11 @@ class ShowViewController: UIViewController {
                     desc = desc.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
                 }
                 
+                
+                self.title = name
+                self.nameLabel.text! = name
+                self.timeLabel.text! = showInfo[2] as! String
+                self.genreLabel.text! = showInfo[3] as! String
                 self.descriptionLabel.text! = desc
             }
         }
@@ -62,14 +66,8 @@ class ShowViewController: UIViewController {
         
         
         
-        
-        
-        
-        
-        
-        
-        if descFromMain != nil {
-            
+        //coming from main view controller "Show Details" button
+        else {
             
             //let imgURL = formatURL(self.urlMain)
             if let url = NSURL(string: "http://"+self.urlMain){
@@ -79,14 +77,11 @@ class ShowViewController: UIViewController {
                 }
             }
             
-            self.timeLabel.text! = self.time
             
+            //remove escape characters in name and description
             if nameMain.containsString("&amp;"){
                 nameMain = nameMain.stringByReplacingOccurrencesOfString("&amp;", withString: "&")
             }
-            self.nameLabel.text! = self.nameMain
-            self.title = self.nameMain
-            self.genreLabel.text! = self.genre
             
             if descFromMain.containsString("\\\'") {
                 descFromMain = descFromMain.stringByReplacingOccurrencesOfString("\\\'", withString: "'")
@@ -95,6 +90,10 @@ class ShowViewController: UIViewController {
                 descFromMain = descFromMain.stringByReplacingOccurrencesOfString("\\\"", withString: "\"")
             }
             
+            self.timeLabel.text! = self.time
+            self.nameLabel.text! = self.nameMain
+            self.title = self.nameMain
+            self.genreLabel.text! = self.genre
             self.descriptionLabel.text! = descFromMain
         }
         

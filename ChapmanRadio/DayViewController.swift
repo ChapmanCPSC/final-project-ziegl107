@@ -17,9 +17,12 @@ class DayViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     var dateTitle : String!
     @IBOutlet weak var dataTableView: UITableView!
 
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //title on navigation controller
         self.title = dateTitle
 
         self.dataTableView.dataSource = self
@@ -58,11 +61,6 @@ class DayViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.init(red: 1, green: 51, blue: 85, alpha: 0)
-    }
-    
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let info = self.data[indexPath.row] as! NSArray
         
@@ -74,6 +72,12 @@ class DayViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCellWithIdentifier("show_cell") as! ShowTableViewCell
         cell.initWithShow(name, time: time)
         return cell
+    }
+    
+    
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.init(red: 1, green: 51, blue: 85, alpha: 0)
     }
     
 }

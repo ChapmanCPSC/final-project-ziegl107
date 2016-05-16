@@ -32,6 +32,9 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     
     var player : AVPlayer!
+    
+    //used for sending to ShowViewController
+    //on button click "Show Details"
     var showDescrip : String = ""
     var genre : String = ""
     var time : String = ""
@@ -41,14 +44,13 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        
-        
+        //sets up AVPlayer
         configureView()
         
         let parsed = parseJSON(getJSON("http://api.chapmanradio.com/legacy/livestreams.json"))
         
         //parsed= show {}, nowplaying {} if not a talk show
+        //if a talk show, sometimes nowplaying is empty
         
         let id = parsed["showid"]
         let stringID = String(id!)
@@ -104,8 +106,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                         url = "http://" + formatURL(url)
                         //because in the place of song not show
                         setSongImage(url)
-                        
-                        
                         
                         
                         //is a talk show but nowplaying is not empty
@@ -165,6 +165,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                                 self.showNameHide.hidden = false
                                 self.showLabel.hidden = false
                                 self.djsLabel.hidden = true
+                                self.sendButton.hidden = true
                                 
                                 
                                 if let topic = nowplaying["text"] {
@@ -192,12 +193,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                                 url = formatURL(url)
                                 self.sendURL = url
                                 setShowImage(url)
-                                
                             }
-                            
-                            
                         }
-
                     }
                       
                     //not a talk show
@@ -205,7 +202,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                         
                         //playing a song
                         if let nowplaying = parsed["nowplaying"] as? NSDictionary{
-                            
                             
                             //nowplaying is a song
                             if nowplaying["trackid"] as! String != "" {
@@ -264,6 +260,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                                 self.showNameHide.hidden = false
                                 self.showLabel.hidden = false
                                 self.djsLabel.hidden = true
+                                self.sendButton.hidden = true
                                 
                                 
                                 if let topic = nowplaying["text"] {
@@ -351,8 +348,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                 self.artistLabel.hidden = true
                 self.talkShowDJsLabel.hidden = true
                 self.talkShowLabel.hidden = true
-                
-                
             }
         }//end of didLoad
         
@@ -405,7 +400,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         }
     }
     
-    
+    //removes extra characters added to URL at beginning and end from JSON
     func formatURL(old: String) -> String {
         var new = old.substringWithRange(Range<String.Index>(old.startIndex..<old.endIndex.advancedBy(-11)))
         new = new.substringWithRange(Range<String.Index>(new.startIndex.advancedBy(2)..<new.endIndex))
@@ -414,6 +409,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     
+    //in viewDidLoad, set up AVPlayer
     func configureView() {
         let url = "https://chapmanradio.com/stream/listen/iTunes.m3u"
         self.player = AVPlayer(URL:NSURL(string: url)!)
@@ -436,6 +432,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         player.muted = false
     }
 
+    
     @IBAction func goShow(sender: AnyObject) {
         let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("show_view") as! UINavigationController
         
@@ -450,6 +447,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         
     }
     
+    
     @IBAction func goSchedule(sender: AnyObject) {
         let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("schedule_view") as! UINavigationController
         
@@ -457,6 +455,9 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     
+    //hidden for:
+    //talk show topics under nowplaying
+    //no show is on
     @IBAction func sendEmail(sender: AnyObject) {
         
         var message = "<p><b>Show: </b>"+showLabel.text! + "</p><p><b> DJs: </b>"+djsLabel.text!

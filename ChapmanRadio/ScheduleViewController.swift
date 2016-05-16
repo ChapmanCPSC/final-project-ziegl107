@@ -15,7 +15,9 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     var parsed : NSDictionary!
     var parsedA : NSArray!
     
-    //all the days in the schedule JSON
+    //all the possible days in the schedule JSON
+    //not all are present at same time
+    //use validateDays() to clear out ones that aren't in the current schedule JSON
     var indeces : [String] = [
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
     ]
@@ -34,11 +36,9 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             self.daysTableView.delegate = self
             self.daysTableView.dataSource = self
             
-            //set up for tableview
             
-            
-            
-            let inset = UIEdgeInsetsMake(10, 0, 0, 0)
+            //move table view down
+            let inset = UIEdgeInsetsMake(7, 0, 0, 0)
             self.daysTableView.contentInset = inset
             
             
@@ -48,27 +48,27 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
         
+/*
+        if let test = parseJSONArray(getJSON("http://api.chapmanradio.com/legacy/schedule.json")) as? NSArray {
+            parsedA = test
+            
+            self.daysTableView.delegate = self
+            self.daysTableView.dataSource = self
+            
+            //set up for tableview
+            
+
+            
+            let inset = UIEdgeInsetsMake(10, 0, 0, 0)
+            self.daysTableView.contentInset = inset
+            
+            
+            let cellNib = UINib(nibName: "DateTableViewCell", bundle: nil)
+            self.daysTableView.registerNib(cellNib, forCellReuseIdentifier: "date_cell")
+
         
-//        if let test = parseJSONArray(getJSON("http://api.chapmanradio.com/legacy/schedule.json")) as? NSArray {
-//            parsedA = test
-//            
-//            self.daysTableView.delegate = self
-//            self.daysTableView.dataSource = self
-//            
-//            //set up for tableview
-//            
-//
-//            
-//            let inset = UIEdgeInsetsMake(10, 0, 0, 0)
-//            self.daysTableView.contentInset = inset
-//            
-//            
-//            let cellNib = UINib(nibName: "DateTableViewCell", bundle: nil)
-//            self.daysTableView.registerNib(cellNib, forCellReuseIdentifier: "date_cell")
-//
-//        
-//        }
-        
+        }
+*/
         
         
     }
@@ -77,8 +77,6 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
     
     
     
@@ -115,7 +113,6 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return parsedA.count
-        
         return indeces.count
     }
     
@@ -124,18 +121,21 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         self.daysTableView.deselectRowAtIndexPath(indexPath, animated: false)
         
         let navVC = self.storyboard!.instantiateViewControllerWithIdentifier("day_view") as! UINavigationController
-        
         let dayVC = navVC.viewControllers[0] as! DayViewController
+        
+        
+        //for dictionary
         let today = parsed[self.indeces[indexPath.row]] as! NSDictionary
+        
+        //for array
         //let today = parsedA[indexPath.row] as! NSDictionary
+        
+        
         dayVC.data = today["data"] as! NSArray
         dayVC.dateTitle = today["title"] as! String
         
         self.presentViewController(navVC, animated: true, completion: nil)
     }
-    
-    
-    
     
     
     
@@ -152,6 +152,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     
+    //when JSON is dictionary of dictionaries
     func parseJSON(input : NSData) -> NSDictionary{
         
         var dictionary : NSDictionary = [:]
@@ -167,6 +168,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     
+    //when JSON is array of dictionaries
     func parseJSONArray(input : NSData) -> NSArray{
         
         var array : NSArray = []
@@ -182,12 +184,12 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     
+    //removes indeces from indeces array if current JSON schedule doesn't include it
     func validateDays() -> () {
         
         var removed = 0
         
-        
-        //will remove from indeces if current schedule JSON doesn't include it
+        //always contains 12 to start with
         for i in 1...12 {
             
             let test : String = "\(i)"
