@@ -348,6 +348,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                 self.artistLabel.hidden = true
                 self.talkShowDJsLabel.hidden = true
                 self.talkShowLabel.hidden = true
+                self.volumeButton.hidden = true
+                self.muteButton.hidden = true
             }
         }//end of didLoad
         
